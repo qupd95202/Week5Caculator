@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Week5Calculator</name>
+    </assembly>
+    <members>
+        <member name="F:Week5Calculator.Controllers.CalculatorController.service">
+            <summary>
+            計算機服務
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Controllers.CalculatorController.GetUserID">
+            <summary>
+            取得ID
+            </summary>
+            <returns>ID</returns>
+        </member>
+        <member name="M:Week5Calculator.Controllers.CalculatorController.GetAnswer(System.String)">
+            <summary>
+            得到答案
+            </summary>
+            <remarks>
+            Here is a sample remarks placeholder.
+            </remarks>
+            <param name="id">用戶</param>
+            <returns>螢幕顯示</returns>
+        </member>
+        <member name="M:Week5Calculator.Controllers.CalculatorController.PostNumber(System.String,Week5Calculator.Parameters.InputCommandParameter)">
+            <summary>
+            輸入指令
+            </summary>
+            <param name="id">用戶</param>
+            <param name="command">指令</param>
+            <returns>目前運算結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Controllers.CalculatorController.CleanAllCommands(System.String)">
+            <summary>
+            清空
+            </summary>
+            <param name="id">用戶</param>
+            <returns>清空結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Controllers.CalculatorController.DeleteOneCommand(System.String)">
+            <summary>
+            刪除最後一個指令
+            </summary>
+            <param name="id">用戶</param>
+            <returns>刪除結果</returns>
+        </member>
+        <member name="T:Week5Calculator.Operators.Operator">
+            <summary>
+            運算子抽象類別
+            </summary>
+        </member>
+        <member name="P:Week5Calculator.Operators.Operator.Priority">
+            <summary>
+            運算子的優先權
+            </summary>
+        </member>
+        <member name="P:Week5Calculator.Operators.Operator.Sign">
+            <summary>
+            運算子符號
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.Operator.Operate(System.Decimal[])">
+            <summary>
+            執行運算抽象函式
+            </summary>
+            <param name="nums">參與運算的運算元</param>
+            <returns>運算結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Operators.Operator.ToString">
+            <summary>
+            回傳運算符號
+            </summary>
+            <returns>運算符號</returns>
+        </member>
+        <member name="T:Week5Calculator.Operators.Priority">
+            <summary>
+            運算優先權
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Priority.MULTIPLICATION">
+            <summary>
+            乘法優先權
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Priority.DIVISION">
+            <summary>
+            除法優先權
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Priority.ADDITION">
+            <summary>
+            加法優先權
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Priority.SUBTRACTION">
+            <summary>
+            減法優先權
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Priority.LEFT_BRACKET">
+            <summary>
+            左括弧優先權
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Priority.RIGHT_BRACKET">
+            <summary>
+            右括弧優先權
+            </summary>
+        </member>
+        <member name="T:Week5Calculator.Operators.Sign">
+            <summary>
+            存全域常數
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Sign.ADDITION_SIGN">
+            <summary>
+            加法符號
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Sign.SUBTRACTION_SIGN">
+            <summary>
+            減法符號
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Sign.MULTIPLICATION_SIGN">
+            <summary>
+            乘法符號
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Sign.DIVISION_SIGN">
+            <summary>
+            除法符號
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Sign.LEFT_BRACKET_SIGN">
+            <summary>
+            左括弧符號
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Operators.Sign.RIGHT_BRACKET_SIGN">
+            <summary>
+            右括弧符號
+            </summary>
+        </member>
+        <member name="P:Week5Calculator.Parameters.UserID.userID">
+            <summary>
+            用戶ID
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Services.Calculator.Evaluate(System.String)">
+            <summary>
+            先乘除、後加減、括號先算
+            </summary>
+            <param name="expr">輸入的運算式</param>
+            <returns>結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Services.Calculator.Calculate(System.Collections.Generic.Stack{System.String})">
+            <summary>
+            計算邏輯
+            </summary>
+            <param name="input">運算式</param>
+            <returns></returns>
+        </member>
+        <member name="F:Week5Calculator.Services.CalculatorService.userRecord">
+            <summary>
+            紀錄是誰輸入、輸入什麼、結果是什麼
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Services.CalculatorService.id">
+            <summary>
+            使用者流水號
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Services.CalculatorService.Input(System.String,System.String)">
+            <summary>
+            輸入指令
+            </summary>
+            <param name="userID">用戶</param>
+            <param name="input">指令</param>
+            <returns>當前指令</returns>
+        </member>
+        <member name="M:Week5Calculator.Services.CalculatorService.ExcuteCalculation(System.String)">
+            <summary>
+            執行計算
+            </summary>
+            <param name="userID">用戶</param>
+        </member>
+        <member name="M:Week5Calculator.Services.CalculatorService.Calculate(System.String)">
+            <summary>
+            計算過程
+            </summary>
+            <param name="command">指令</param>
+            <returns>計算結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Services.CalculatorService.GetAnser(System.String)">
+            <summary>
+            = 鍵
+            </summary>
+            <param name="userID">用戶</param>
+            <returns>計算結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Services.CalculatorService.Clear(System.String)">
+            <summary>
+            清空
+            </summary>
+            <param name="userID">用戶</param>
+            <returns>結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Services.CalculatorService.DeleteOne(System.String)">
+            <summary>
+            刪除最後一個指令
+            </summary>
+            <param name="userID">用戶</param>
+            <returns>結果</returns>
+        </member>
+        <member name="M:Week5Calculator.Services.CalculatorService.CreatUserID">
+            <summary>
+            創建用戶
+            </summary>
+            <param name="userID">用戶id</param>
+        </member>
+        <member name="T:Week5Calculator.Services.CommandAndValue">
+            <summary>
+            輸入之指令和運算結果
+            </summary>
+        </member>
+        <member name="T:Week5Calculator.ValidationAttributes.CommandAttribute">
+            <summary>
+            驗證輸入的指令格式
+            </summary>
+        </member>
+    </members>
+</doc>
