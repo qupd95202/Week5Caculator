@@ -25,7 +25,7 @@ namespace Week5Calculator.Operators
         /// </summary>
         /// <param name="nums">參與運算的運算元</param>
         /// <returns>運算結果</returns>
-        public abstract decimal Operate(params decimal[] nums);
+        public abstract double Operate(params double[] nums);
 
         /// <summary>
         /// 回傳運算符號

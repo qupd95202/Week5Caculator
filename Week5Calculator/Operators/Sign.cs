@@ -39,5 +39,20 @@ namespace Week5Calculator.Operators
         /// 右括弧符號
         /// </summary>
         public const char RIGHT_BRACKET_SIGN = ')';
+
+        /// <summary>
+        /// 判斷是否是數字
+        /// </summary>
+        /// <param name="input">傳入的字元</param>
+        /// <returns></returns>
+        public static bool IsNumeric(char input)
+        {
+            if (input == RIGHT_BRACKET_SIGN || input == LEFT_BRACKET_SIGN || input == DIVISION_SIGN
+                || input == ADDITION_SIGN || input == SUBTRACTION_SIGN || input == MULTIPLICATION_SIGN)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace Week5Calculator
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-            services.AddSingleton(new CalculatorService());
+            services.AddSingleton<CalculatorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

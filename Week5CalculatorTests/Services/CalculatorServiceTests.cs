@@ -18,7 +18,7 @@ namespace Week5Calculator.Services.Tests
         /// 沒有此ID的時候
         /// </summary>
         [TestMethod()]
-        public void InputTest()
+        public void 測試ID不存在()
         {
 
             string userID = "user17";
@@ -31,7 +31,7 @@ namespace Week5Calculator.Services.Tests
         /// 傳入字串是否成功
         /// </summary>
         [TestMethod()]
-        public void InputTest2()
+        public void 傳入字串是否成功()
         {
             string userID = "user1";
             string teseString = "1";
@@ -46,7 +46,7 @@ namespace Week5Calculator.Services.Tests
         /// 刪除前一個指令
         /// </summary>
         [TestMethod()]
-        public void DeleteOneTest()
+        public void 刪除前一個指令()
         {
             testService.CreatUserID();
             testService.Input("user1", "1+5+7-34");
@@ -58,7 +58,7 @@ namespace Week5Calculator.Services.Tests
         /// 若沒指令時刪除前一個指令，結果應該要一樣
         /// </summary>
         [TestMethod()]
-        public void DeleteOneTest2()
+        public void 若沒指令時刪除前一個指令()
         {
             testService.CreatUserID();
             testService.Input("user1", "");
@@ -70,7 +70,7 @@ namespace Week5Calculator.Services.Tests
         /// 測試括號
         /// </summary>
         [TestMethod()]
-        public void CalculateTest1()
+        public void 測試基本括號()
         {
             //arrange
             string test1 = "1*(5+3)";
@@ -82,7 +82,7 @@ namespace Week5Calculator.Services.Tests
         /// 測試不符合規範值之值1
         /// </summary>
         [TestMethod()]
-        public void CalculateTest2()
+        public void 測試輸入運算子加數字加運算子()
         {
 
             string test2 = "++3--";
@@ -94,7 +94,7 @@ namespace Week5Calculator.Services.Tests
         /// 測試不符合規範值之值2
         /// </summary>
         [TestMethod()]
-        public void CalculateTest3()
+        public void 測試只輸入一個運算子()
         {
 
             string test3 = "-";
@@ -106,7 +106,7 @@ namespace Week5Calculator.Services.Tests
         /// 測試一般四則運算
         /// </summary>
         [TestMethod()]
-        public void CalculateTest4()
+        public void 測試一般四則運算有括號()
         {
             string test4 = "3*(4+3*(3-6))-2*(3-4)-0.2";
 
@@ -117,11 +117,19 @@ namespace Week5Calculator.Services.Tests
         /// 測試一般四則運算
         /// </summary>
         [TestMethod()]
-        public void CalculateTest5()
+        public void 測試一般四則運算()
         {
             string test5 = "7*8*3/2*0.7";
 
             Assert.AreEqual(testService.Calculate(test5).Value, 58.8);
+        }
+
+        [TestMethod()]
+        public void 測試除數為0之狀況()
+        {
+            string test5 = "7*8*3/0";
+
+            Assert.AreEqual(testService.Calculate(test5).Result.GetType(), typeof(BadRequestResult));
         }
 
     }

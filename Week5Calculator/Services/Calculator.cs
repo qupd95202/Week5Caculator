@@ -8,174 +8,127 @@ using Week5Calculator.Operators;
 namespace Week5Calculator.Services
 {
     public class Calculator
-    {
+    {      
         /// <summary>
-        /// 先乘除、後加減、括號先算
+        /// 計算 [把字串轉成物件，再轉成後序式]
         /// </summary>
-        /// <param name="expr">輸入的運算式</param>
-        /// <returns>結果</returns>
-        public static double Evaluate(string expr)
+        /// <param name="input">中序運算式</param>
+        /// <returns></returns>
+        public static double Solve(string input)
         {
-            //儲存運算式
-            Stack<string> mainStack = new Stack<string>();
-            //儲存乘除專用
-            Stack<string> subStack = new Stack<string>();
-            //運算子們
-            string operators = "+-*/";
-            //暫存值
-            string tempValue = "";
-            for (int i = 0; i < expr.Length; i++)
-            {
-                string currentString = expr.Substring(i, 1);
-
-                //如果是運算子，且暫存值有東西，把運算子丟進stack
-                if (operators.Contains(currentString) && tempValue != "")
-                {   
-                    //有乘除時先算
-                    if (subStack.Count != 0)
-                    {
-                        subStack.Push(tempValue);
-                        mainStack.Push(Calculate(subStack).ToString());
-                        tempValue = "";
-                    }
-                    else
-                    {
-                        mainStack.Push(tempValue);
-                        tempValue = "";
-                    }
-                }
-
-                //遇到括號
-                if (currentString.Equals("("))
+            List<Object> objectList = TransToPostfix(TransToOperator(input));
+            Stack<double> stack = new Stack<double>();
+            foreach (var item in objectList)
+            {   //數字放進數字專用stack
+                if (item is double number)
                 {
-                    string innerExp = ""; //括號內的運算式
-                    i++;
-                    int bracketCount = 0; //括號數量
-                    for (; i < expr.Length; i++)
-                    {
-                        currentString = expr.Substring(i, 1); //下一個字元
-
-                        if (currentString.Equals("("))
-                        {
-                            bracketCount++;
-                        }
-
-                        if (currentString.Equals(")"))
-                        {
-                            if (bracketCount == 0)
-                            {
-                                break;
-                            }
-
-                            else
-                            {
-                                bracketCount--;
-                            }
-                        }
-                        innerExp += currentString;
-                    }
-
-                    if (subStack.Count != 0)
-                    {
-                        tempValue += Evaluate(innerExp).ToString(); //遞迴傳進暫存值
-                    }
-                    else
-                    {
-                        mainStack.Push(Evaluate(innerExp).ToString()); //遞迴傳進stack
-                    }
+                    stack.Push(number);
                 }
-                //加減運算子直接放
-                if (currentString.Equals("+") || currentString.Equals("-"))
-                {
-                    mainStack.Push(currentString);
-                }
-                //乘除運算子放優先處理的stack的
-                else if (currentString.Equals("*") || currentString.Equals("/"))
-                {
-                    subStack.Push(mainStack.Pop());
-                    subStack.Push(currentString);
-                }
-                //最後一個為括號
-                else if (currentString.Equals(")"))
-                {
-                    if (i == (expr.Length - 1))
+                else if (item is Operator @operator)
+                {   //遇到運算子就依照各個運算子的運算方法，取前兩個數字做運算(後序式定義)
+                    double[] parameters = new double[2];
+                    for (int i = parameters.Length - 1; i >= 0; i--)
                     {
-                        if (subStack.Count != 0)
-                        {
-                            subStack.Push(tempValue);
-                            mainStack.Push(Calculate(subStack).ToString());
-                        }
-                        else
-                        {
-                            mainStack.Push(tempValue);
-                        }
+                        parameters[i] = stack.Pop();
                     }
-                }
-                //數字
-                else if (Regex.IsMatch(currentString, "^[\\d.]$"))
-                {
-                    tempValue += currentString;
-
-                    //最後一個
-                    if (i == (expr.Length - 1))
-                    {
-                        if (subStack.Count != 0)
-                        {
-                            subStack.Push(tempValue);
-                            mainStack.Push(Calculate(subStack).ToString());
-                        }
-                        else
-                        {
-                            mainStack.Push(tempValue);
-                        }
-                    }
+                    //算完放回數字專用stack
+                    stack.Push(@operator.Operate(parameters));
                 }
             }
-            return Calculate(mainStack);
+            return stack.Peek();
         }
 
+
         /// <summary>
-        /// 計算邏輯
+        /// 轉後序式
         /// </summary>
-        /// <param name="input">運算式</param>
+        /// <param name="input">中序運算式</param>
         /// <returns></returns>
-        private static double Calculate(Stack<string> input)
+        private static List<Object> TransToPostfix(List<Object> input)
         {
-            double result = 0;
-            //倒著取出放進另一個stack，以求由左至右
-            Stack<string> reverse = new Stack<string>();
-            while (input.Count != 0)
+            List<Object> objectList = new List<object>();
+            Stack<Operator> tempStack = new Stack<Operator>();
+            foreach (object item in input)
             {
-                reverse.Push(input.Pop());
-            }
+                if (item is double number)
+                {
+                    objectList.Add(number);
+                }
 
-            //取出數字+運算子+數字的規律來計算，並放回去stack
-            while (reverse.Count >= 3)
+                if (item is Operator @operator)
+                {   
+                    //遇到右括號時
+                    if (@operator.GetType() == typeof(RightBracketOperator))
+                    {   
+                        //存起來的運算子都丟過去
+                        while (tempStack.Peek().GetType() != typeof(LeftBracketOperator))
+                        {
+                            objectList.Add(tempStack.Pop());
+                        }
+                        // 移除左括號
+                        tempStack.Pop();
+                    }
+                    //優先順序，大者直接進運算式
+                    else if (tempStack.Count == 0 || @operator.Priority > tempStack.Peek().Priority || tempStack.Peek().GetType() == typeof(LeftBracketOperator))
+                    {
+                        tempStack.Push(@operator);
+                    }
+                    else
+                    {   //小或等於，則交換位置【迴圈直到最小運算子在stack最前端】
+                        while (tempStack.Count != 0 && @operator.Priority <= tempStack.Peek().Priority)
+                        {
+                            objectList.Add(tempStack.Pop());
+                        }
+                        tempStack.Push(@operator);
+                    }
+                }
+            }
+            //將剩餘的運算子丟出
+            while (tempStack.Count > 0)
             {
-
-                double left = Convert.ToDouble(reverse.Pop());
-                string op = reverse.Pop();
-                double right = Convert.ToDouble(reverse.Pop());
-
-                if (op == "+")
-                {
-                    result = left + right;
-                }
-                else if (op == "-")
-                {
-                    result = left - right;
-                }
-                else if (op == "*")
-                {
-                    result = left * right;
-                }
-                else if (op == "/")
-                {
-                    result = left / right;
-                }
-                reverse.Push(result.ToString());
+                objectList.Add(tempStack.Pop());
             }
-            return Convert.ToDouble(reverse.Pop());
+            return objectList;
+        }
+
+
+        /// <summary>
+        /// string轉成物件
+        /// </summary>
+        /// <param name="input">字串</param>
+        /// <returns></returns>
+        private static List<Object> TransToOperator(string exp)
+        {
+            List<Object> objectList = new List<object>();
+            string tempValue = string.Empty;
+            foreach (char c in exp)
+            {   
+                //數字連起來
+                if (Sign.IsNumeric(c))
+                {
+                    tempValue += c;
+                }
+                else
+                {   //數字丟進去算式
+                    if (tempValue != string.Empty)
+                    {
+                        double result;
+                        double.TryParse(tempValue, out result);
+                        objectList.Add(result);
+                        tempValue = string.Empty;
+                    }
+                    //運算子丟進算式
+                    objectList.Add(OperatorFactory.GetOperator(c));
+                }
+            }
+            //最後有數字丟數字回去算式
+            if (tempValue != string.Empty)
+            {
+                double result;
+                double.TryParse(tempValue, out result);
+                objectList.Add(result);
+            }
+            return objectList;
         }
     }
 }

@@ -47,6 +47,54 @@
             <param name="id">用戶</param>
             <returns>刪除結果</returns>
         </member>
+        <member name="T:Week5Calculator.Operators.AdditionOperator">
+            <summary>
+            加法運算
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.AdditionOperator.Operate(System.Double[])">
+            <summary>
+            執行加法計算
+            </summary>
+            <param name="nums">參與運算的運算元</param>
+            <returns>運算結果</returns>
+        </member>
+        <member name="T:Week5Calculator.Operators.DivisionOperator">
+            <summary>
+            除法運算
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.DivisionOperator.Operate(System.Double[])">
+            <summary>
+            執行除法計算
+            </summary>
+            <param name="nums">參與運算的運算元</param>
+            <returns>運算結果</returns>
+        </member>
+        <member name="T:Week5Calculator.Operators.LeftBracketOperator">
+            <summary>
+            左括號運算子
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.LeftBracketOperator.Operate(System.Double[])">
+            <summary>
+            括號不需要計算
+            </summary>
+            <param name="nums">運算元</param>
+            <returns>計算結果</returns>
+        </member>
+        <member name="T:Week5Calculator.Operators.MultiplicationOperator">
+            <summary>
+            乘法運算
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.MultiplicationOperator.Operate(System.Double[])">
+            <summary>
+            執行乘法計算
+            </summary>
+            <param name="nums">參與運算的運算元</param>
+            <returns>運算結果</returns>
+        </member>
         <member name="T:Week5Calculator.Operators.Operator">
             <summary>
             運算子抽象類別
@@ -62,7 +110,7 @@
             運算子符號
             </summary>
         </member>
-        <member name="M:Week5Calculator.Operators.Operator.Operate(System.Decimal[])">
+        <member name="M:Week5Calculator.Operators.Operator.Operate(System.Double[])">
             <summary>
             執行運算抽象函式
             </summary>
@@ -74,6 +122,23 @@
             回傳運算符號
             </summary>
             <returns>運算符號</returns>
+        </member>
+        <member name="T:Week5Calculator.Operators.OperatorFactory">
+            <summary>
+            創建並提供 Operator
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.OperatorFactory.#cctor">
+            <summary>
+            初始化時創建所有 operator
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.OperatorFactory.GetOperator(System.Char)">
+            <summary>
+            字元轉物件
+            </summary>
+            <param name="operatorSign">輸入的字元</param>
+            <returns>物件</returns>
         </member>
         <member name="T:Week5Calculator.Operators.Priority">
             <summary>
@@ -110,6 +175,18 @@
             右括弧優先權
             </summary>
         </member>
+        <member name="T:Week5Calculator.Operators.RightBracketOperator">
+            <summary>
+            右括號運算子
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.RightBracketOperator.Operate(System.Double[])">
+            <summary>
+            括號不需要計算
+            </summary>
+            <param name="nums">運算元</param>
+            <returns>計算結果</returns>
+        </member>
         <member name="T:Week5Calculator.Operators.Sign">
             <summary>
             存全域常數
@@ -145,23 +222,49 @@
             右括弧符號
             </summary>
         </member>
+        <member name="M:Week5Calculator.Operators.Sign.IsNumeric(System.Char)">
+            <summary>
+            判斷是否是數字
+            </summary>
+            <param name="input">傳入的字元</param>
+            <returns></returns>
+        </member>
+        <member name="T:Week5Calculator.Operators.SubtractionOperator">
+            <summary>
+            減法運算
+            </summary>
+        </member>
+        <member name="M:Week5Calculator.Operators.SubtractionOperator.Operate(System.Double[])">
+            <summary>
+            執行減法計算
+            </summary>
+            <param name="nums">運算元</param>
+            <returns>運算結果</returns>
+        </member>
         <member name="P:Week5Calculator.Parameters.UserID.userID">
             <summary>
             用戶ID
             </summary>
         </member>
-        <member name="M:Week5Calculator.Services.Calculator.Evaluate(System.String)">
+        <member name="M:Week5Calculator.Services.Calculator.Solve(System.String)">
             <summary>
-            先乘除、後加減、括號先算
+            計算 [把字串轉成物件，再轉成後序式]
             </summary>
-            <param name="expr">輸入的運算式</param>
-            <returns>結果</returns>
+            <param name="input">中序運算式</param>
+            <returns></returns>
         </member>
-        <member name="M:Week5Calculator.Services.Calculator.Calculate(System.Collections.Generic.Stack{System.String})">
+        <member name="M:Week5Calculator.Services.Calculator.TransToPostfix(System.Collections.Generic.List{System.Object})">
             <summary>
-            計算邏輯
+            轉後序式
             </summary>
-            <param name="input">運算式</param>
+            <param name="input">中序運算式</param>
+            <returns></returns>
+        </member>
+        <member name="M:Week5Calculator.Services.Calculator.TransToOperator(System.String)">
+            <summary>
+            string轉成物件
+            </summary>
+            <param name="input">字串</param>
             <returns></returns>
         </member>
         <member name="F:Week5Calculator.Services.CalculatorService.userRecord">
@@ -172,6 +275,11 @@
         <member name="F:Week5Calculator.Services.CalculatorService.id">
             <summary>
             使用者流水號
+            </summary>
+        </member>
+        <member name="F:Week5Calculator.Services.CalculatorService.key">
+            <summary>
+            鎖專用
             </summary>
         </member>
         <member name="M:Week5Calculator.Services.CalculatorService.Input(System.String,System.String)">

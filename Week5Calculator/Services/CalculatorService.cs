@@ -3,6 +3,7 @@ using NCalc;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
+using System;
 
 namespace Week5Calculator.Services
 {
@@ -17,7 +18,10 @@ namespace Week5Calculator.Services
         /// </summary>
         private int id = 0;
         private const int USER_UP_LIMIT = 10;
-
+        /// <summary>
+        /// 鎖專用
+        /// </summary>
+        private static readonly object key = new object();
         /// <summary>
         /// 輸入指令
         /// </summary>
@@ -40,7 +44,7 @@ namespace Week5Calculator.Services
                     DeleteOne(userID);
                 }
             }
-            lock (userRecord)
+            lock (key)
             {
                 userRecord[userID].Command += input;
             }
@@ -97,9 +101,9 @@ namespace Week5Calculator.Services
             else
             {
                 userCommandValue.Value = result.Value;
-                lock (userRecord)
+                lock (key)
                 {
-                    userRecord[userID].Command = "";
+                    userRecord[userID].Command = string.Empty;
                 }
                 return userCommandValue.Value;
             }
@@ -113,13 +117,19 @@ namespace Week5Calculator.Services
         public ActionResult<double> Calculate(string command)
         {
             Expression e = new Expression(command);
-            //StringToFormula stringToFormula = new StringToFormula();
+            
             if (e.HasErrors())
             {
                 return new BadRequestResult();
             }
-
-            return Calculator.Evaluate(command);
+            try
+            {
+                return Calculator.Solve(command);
+            } catch(DivideByZeroException)
+            {
+                return new BadRequestResult();
+            }
+           
         }
 
         /// <summary>
@@ -145,9 +155,9 @@ namespace Week5Calculator.Services
         {
             if (userRecord.ContainsKey(userID))
             {
-                lock (userRecord)
+                lock (key)
                 {
-                    userRecord[userID].Command = "";
+                    userRecord[userID].Command = string.Empty;
                     userRecord[userID].Value = 0;
                 }
                 return new NoContentResult();
@@ -166,7 +176,7 @@ namespace Week5Calculator.Services
             {
                 return new NotFoundResult();
             }
-            if (userRecord[userID].Command != "")
+            if (!string.IsNullOrEmpty(userRecord[userID].Command))
             {
                 int lastIndex = userRecord[userID].Command.Length - 1;
                 userRecord[userID].Command = userRecord[userID].Command.Remove(lastIndex, 1);
@@ -192,7 +202,7 @@ namespace Week5Calculator.Services
             var userID = $"user{id}";
             if (userRecord.ContainsKey(userID))
             {
-                lock (userRecord)
+                lock (key)
                 {
                     userRecord[userID] = new CommandAndValue();
                 }
